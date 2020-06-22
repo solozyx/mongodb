@@ -51,7 +51,7 @@ func connectMongo() *mgo.Session {
 }
 
 func main() {
-	list, _ := PrizeList((2-1)*5, 5)
+	list, _, _ := PrizeList(2, 5)
 	for _, prize := range list {
 		logrus.Debugf("%+v", prize)
 	}
