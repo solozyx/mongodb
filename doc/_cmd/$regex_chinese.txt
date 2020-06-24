@@ -1,0 +1,18 @@
+
+db.product.insert({"sku" : "abc123", "description" : "单行"})
+db.product.insert({"sku" : "abc789", "description" : "第一行\n第二行"})
+db.product.insert({"sku" : "xyz456", "description" : "很多空白在     这儿之前"})
+db.product.insert({"sku" : "xyz789", "description" : "多\n行"})
+
+> db.product.find()
+{ "_id" : ObjectId("5ef06cbc01e1b314ff7c560d"), "sku" : "abc123", "description" : "Single line description." }
+{ "_id" : ObjectId("5ef06cbc01e1b314ff7c560e"), "sku" : "abc789", "description" : "First line\nSecond line" }
+{ "_id" : ObjectId("5ef06cbc01e1b314ff7c560f"), "sku" : "xyz456", "description" : "Many spaces before     line" }
+{ "_id" : ObjectId("5ef06cbd01e1b314ff7c5610"), "sku" : "xyz789", "description" : "Multiple\nline description" }
+{ "_id" : ObjectId("5ef07a3901e1b314ff7c5611"), "sku" : "abc123", "description" : "单行" }
+{ "_id" : ObjectId("5ef07a3901e1b314ff7c5612"), "sku" : "abc789", "description" : "第一行\n第二行" }
+{ "_id" : ObjectId("5ef07a3901e1b314ff7c5613"), "sku" : "xyz456", "description" : "很多空白在     这儿之前" }
+{ "_id" : ObjectId("5ef07a3901e1b314ff7c5614"), "sku" : "xyz789", "description" : "多\n行" }
+>
+
+db.product.find( { description: { $regex: /单/ } } )

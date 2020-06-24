@@ -1,0 +1,276 @@
+
+db.regex_test.createIndex({"description":1})
+
+db.regex_test.insert({"sku" : "abc123", "description" : "Single line description."})
+db.regex_test.insert({"sku" : "abc789", "description" : "First line\nSecond line"})
+db.regex_test.insert({"sku" : "xyz456", "description" : "Many spaces before     line"})
+db.regex_test.insert({"sku" : "xyz789", "description" : "Multiple\nline description"})
+
+db.regex_test.insert({"sku" : "abc123", "description" : "单行"})
+db.regex_test.insert({"sku" : "abc789", "description" : "第一行\n第二行"})
+db.regex_test.insert({"sku" : "xyz456", "description" : "很多空白在     这儿之前"})
+db.regex_test.insert({"sku" : "xyz789", "description" : "多\n行"})
+
+
+> db.regex_test.createIndex({"description":1})
+{
+	"createdCollectionAutomatically" : true,
+	"numIndexesBefore" : 1,
+	"numIndexesAfter" : 2,
+	"ok" : 1
+}
+> db.regex_test.insert({"sku" : "abc123", "description" : "Single line description."})
+WriteResult({ "nInserted" : 1 })
+> db.regex_test.insert({"sku" : "abc789", "description" : "First line\nSecond line"})
+WriteResult({ "nInserted" : 1 })
+
+db.regex_test.insert({"sku" : "xyz789", "description" : "Multiple\nline description"})
+
+db.regex_test.insert({"sku" : "abc123", "description" : "单行"})
+db.regex_test.insert({"sku" : "abc789", "description" : "第一行\n第二行"})
+db.regex_test.insert({"sku" : "xyz456", "description" : "很多空白在     这儿之前"})
+db.regex_test.insert({"sku" : "xyz789", "description" : "多\n行"})> db.regex_test.insert({"sku" : "xyz456", "description" : "Many spaces before     lidb.regex_test.insert({"sku" : "xyz456", "description" : "Many spaces before     line"})
+WriteResult({ "nInserted" : 1 })
+> db.regex_test.insert({"sku" : "xyz789", "description" : "Multiple\nline description"})
+WriteResult({ "nInserted" : 1 })
+>
+> db.regex_test.insert({"sku" : "abc123", "description" : "单行"})
+WriteResult({ "nInserted" : 1 })
+> db.regex_test.insert({"sku" : "abc789", "description" : "第一行\n第二行"})
+WriteResult({ "nInserted" : 1 })
+> db.regex_test.insert({"sku" : "xyz456", "description" : "很多空白在     这儿之前"})
+WriteResult({ "nInserted" : 1 })
+> db.regex_test.insert({"sku" : "xyz789", "description" : "多\n行"})
+WriteResult({ "nInserted" : 1 })
+>
+
+db.regex_test.find( { description: { $regex: /单/ } } )
+db.regex_test.find( { description: { $regex: /单/ } } ).explain()
+
+> db.regex_test.find( { description: { $regex: /   / } } )
+{ "_id" : ObjectId("5ef0813001e1b314ff7c5617"), "sku" : "xyz456", "description" : "Many spaces before     line" }
+{ "_id" : ObjectId("5ef0813001e1b314ff7c561b"), "sku" : "xyz456", "description" : "很多空白在     这儿之前" }
+> db.regex_test.find( { description: { $regex: /   / } } ).explain()
+{
+	"queryPlanner" : {
+		"plannerVersion" : 1,
+		"namespace" : "test.regex_test",
+		"indexFilterSet" : false,
+		"parsedQuery" : {
+			"description" : {
+				"$regex" : "   "
+			}
+		},
+		"winningPlan" : {
+			"stage" : "FETCH",
+			"inputStage" : {
+				"stage" : "IXSCAN",
+				"filter" : {
+					"description" : {
+						"$regex" : "   "
+					}
+				},
+				"keyPattern" : {
+					"description" : 1
+				},
+				"indexName" : "description_1",
+				"isMultiKey" : false,
+				"multiKeyPaths" : {
+					"description" : [ ]
+				},
+				"isUnique" : false,
+				"isSparse" : false,
+				"isPartial" : false,
+				"indexVersion" : 2,
+				"direction" : "forward",
+				"indexBounds" : {
+					"description" : [
+						"[\"\", {})",
+						"[/   /, /   /]"
+					]
+				}
+			}
+		},
+		"rejectedPlans" : [ ]
+	},
+	"serverInfo" : {
+		"host" : "CentOS3",
+		"port" : 27017,
+		"version" : "4.0.0",
+		"gitVersion" : "3b07af3d4f471ae89e8186d33bbb1d5259597d51"
+	},
+	"ok" : 1
+}
+>
+>
+>
+> db.regex_test.find( { description: { $regex: /   / } } )
+{ "_id" : ObjectId("5ef0813001e1b314ff7c5617"), "sku" : "xyz456", "description" : "Many spaces before     line" }
+{ "_id" : ObjectId("5ef0813001e1b314ff7c561b"), "sku" : "xyz456", "description" : "很多空白在     这儿之前" }
+> db.regex_test.find( { description: { $regex: /   / } } ).explain()
+{
+	"queryPlanner" : {
+		"plannerVersion" : 1,
+		"namespace" : "test.regex_test",
+		"indexFilterSet" : false,
+		"parsedQuery" : {
+			"description" : {
+				"$regex" : "   "
+			}
+		},
+		"winningPlan" : {
+			"stage" : "FETCH",
+			"inputStage" : {
+				"stage" : "IXSCAN",
+				"filter" : {
+					"description" : {
+						"$regex" : "   "
+					}
+				},
+				"keyPattern" : {
+					"description" : 1
+				},
+				"indexName" : "description_1",
+				"isMultiKey" : false,
+				"multiKeyPaths" : {
+					"description" : [ ]
+				},
+				"isUnique" : false,
+				"isSparse" : false,
+				"isPartial" : false,
+				"indexVersion" : 2,
+				"direction" : "forward",
+				"indexBounds" : {
+					"description" : [
+						"[\"\", {})",
+						"[/   /, /   /]"
+					]
+				}
+			}
+		},
+		"rejectedPlans" : [ ]
+	},
+	"serverInfo" : {
+		"host" : "CentOS3",
+		"port" : 27017,
+		"version" : "4.0.0",
+		"gitVersion" : "3b07af3d4f471ae89e8186d33bbb1d5259597d51"
+	},
+	"ok" : 1
+}
+>
+>
+>
+> db.regex_test.find( { description: { $regex: /   / } } )
+{ "_id" : ObjectId("5ef0813001e1b314ff7c5617"), "sku" : "xyz456", "description" : "Many spaces before     line" }
+{ "_id" : ObjectId("5ef0813001e1b314ff7c561b"), "sku" : "xyz456", "description" : "很多空白在     这儿之前" }
+> db.regex_test.find( { description: { $regex: /   / } } ).explain()
+{
+	"queryPlanner" : {
+		"plannerVersion" : 1,
+		"namespace" : "test.regex_test",
+		"indexFilterSet" : false,
+		"parsedQuery" : {
+			"description" : {
+				"$regex" : "   "
+			}
+		},
+		"winningPlan" : {
+			"stage" : "FETCH",
+			"inputStage" : {
+				"stage" : "IXSCAN",
+				"filter" : {
+					"description" : {
+						"$regex" : "   "
+					}
+				},
+				"keyPattern" : {
+					"description" : 1
+				},
+				"indexName" : "description_1",
+				"isMultiKey" : false,
+				"multiKeyPaths" : {
+					"description" : [ ]
+				},
+				"isUnique" : false,
+				"isSparse" : false,
+				"isPartial" : false,
+				"indexVersion" : 2,
+				"direction" : "forward",
+				"indexBounds" : {
+					"description" : [
+						"[\"\", {})",
+						"[/   /, /   /]"
+					]
+				}
+			}
+		},
+		"rejectedPlans" : [ ]
+	},
+	"serverInfo" : {
+		"host" : "CentOS3",
+		"port" : 27017,
+		"version" : "4.0.0",
+		"gitVersion" : "3b07af3d4f471ae89e8186d33bbb1d5259597d51"
+	},
+	"ok" : 1
+}
+>
+>
+>
+> db.regex_test.find( { description: { $regex: /   / } } )
+{ "_id" : ObjectId("5ef0813001e1b314ff7c5617"), "sku" : "xyz456", "description" : "Many spaces before     line" }
+{ "_id" : ObjectId("5ef0813001e1b314ff7c561b"), "sku" : "xyz456", "description" : "很多空白在     这儿之前" }
+>
+> db.regex_test.find( { description: { $regex: /   / } } ).explain()
+{
+	"queryPlanner" : {
+		"plannerVersion" : 1,
+		"namespace" : "test.regex_test",
+		"indexFilterSet" : false,
+		"parsedQuery" : {
+			"description" : {
+				"$regex" : "   "
+			}
+		},
+		"winningPlan" : {
+			"stage" : "FETCH",
+			"inputStage" : {
+				"stage" : "IXSCAN",
+				"filter" : {
+					"description" : {
+						"$regex" : "   "
+					}
+				},
+				"keyPattern" : {
+					"description" : 1
+				},
+				"indexName" : "description_1",
+				"isMultiKey" : false,
+				"multiKeyPaths" : {
+					"description" : [ ]
+				},
+				"isUnique" : false,
+				"isSparse" : false,
+				"isPartial" : false,
+				"indexVersion" : 2,
+				"direction" : "forward",
+				"indexBounds" : {
+					"description" : [
+						"[\"\", {})",
+						"[/   /, /   /]"
+					]
+				}
+			}
+		},
+		"rejectedPlans" : [ ]
+	},
+	"serverInfo" : {
+		"host" : "CentOS3",
+		"port" : 27017,
+		"version" : "4.0.0",
+		"gitVersion" : "3b07af3d4f471ae89e8186d33bbb1d5259597d51"
+	},
+	"ok" : 1
+}
+>

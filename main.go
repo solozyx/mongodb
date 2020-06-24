@@ -15,8 +15,9 @@ var (
 
 const (
 	// _mgoHost = "192.168.174.149:27017"
-	_mgoHost = "127.0.0.1:27017"
-	_mgoDB   = "MzDB"
+
+	_mgoHost = "127.0.0.1:28001"
+	_mgoDB   = "test"
 )
 
 func init() {
@@ -51,10 +52,18 @@ func connectMongo() *mgo.Session {
 }
 
 func main() {
-	list, _, _ := PrizeList(2, 5)
-	for _, prize := range list {
-		logrus.Debugf("%+v", prize)
-	}
+	//list, _, _ := PrizeList(2, 5)
+	//for _, prize := range list {
+	//	logrus.Debugf("%+v", prize)
+	//}
+
+	//ul := MgoUserLottery{
+	//	UserID:   1,
+	//}
+	//CreateUserLottery(ul)
+	//CreateUserLottery(ul)
+
+	DelByUserId(1)
 }
 
 func randomUserId(idRange int) int {
